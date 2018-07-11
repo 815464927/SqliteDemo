@@ -1,6 +1,5 @@
 package com.song.sqlitedemo;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -32,21 +31,37 @@ public class MainActivity extends AppCompatActivity {
         //id int,name varchar(20),tell varchar(20)
         if(null == mDemoHelper) createDabase();
         SQLiteDatabase db = mDemoHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("id","1");
-        values.put("tellname","song");
-        values.put("tell","110");
-        db.insert(DemoHelper.DB_TABLE,null,values);
+
+        //方法一
+//        ContentValues values = new ContentValues();
+//        values.put("id","1");
+//        values.put("tellname","song");
+//        values.put("tell","110");
+//        db.insert(DemoHelper.DB_TABLE,null,values);
+//        Log.d("song--->","insert values id = 1,tellname = song,tell = 110");
+
+        //方法二：
+        String sqlInsert = "insert into "+DemoHelper.DB_TABLE+"(id,tellname,tell) values('3','InsertSong','111')";
+        db.execSQL(sqlInsert);
+        Log.d("song--->","insert values id = 3,song = InsertSong,tell = 111");
+
         db.close();
-        Log.d("song--->","insert values id = 1,tellname = song,tell = 110");
     }
 
     public void clickDelete(View v){
         if(null == mDemoHelper) createDabase();
         SQLiteDatabase db = mDemoHelper.getWritableDatabase();
-        db.delete(DemoHelper.DB_TABLE,"id=?",new String[]{"1"});
+
+        //方法一：
+//        db.delete(DemoHelper.DB_TABLE,"id=?",new String[]{"1"});
+//        Log.d("song--->","delete values id = 1");
+
+        //方法二：
+        String sqlDelete = "delete from "+DemoHelper.DB_TABLE+" where id = 3";
+        db.execSQL(sqlDelete);
+        Log.d("song--->","delete values id = 3");
+
         db.close();
-        Log.d("song--->","delete values id = 1");
     }
 
     public void clickquery(View v){
@@ -68,9 +83,16 @@ public class MainActivity extends AppCompatActivity {
     public void clickUpdate(View v){
         if(null == mDemoHelper) createDabase();
         SQLiteDatabase db = mDemoHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("tellname","song111");
-        db.update(DemoHelper.DB_TABLE, contentValues, "id=?", new String[]{"1"});
+
+        //方法一：
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put("tellname","song111");
+//        db.update(DemoHelper.DB_TABLE, contentValues, "id=?", new String[]{"1"});
+
+        //方法二：
+        String sqlUpdate = "update "+DemoHelper.DB_TABLE+" set tellname = 'songUpdate' where id = 3";
+        db.execSQL(sqlUpdate);
+
         Log.d("song--->","update...");
         clickquery(v);
         db.close();
